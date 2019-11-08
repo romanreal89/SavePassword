@@ -1,12 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
 namespace SavePassword.ConsoleTest {
     class Program {
         static void Main(string[] args) {
+            List<Test> tests = new List<Test> {
+                new Test{ Id =1, Name = "Test1", BirthDay = DateTime.Today, IsActive = true },
+                new Test{ Id =2, Name = "Test2", BirthDay = DateTime.Today.AddDays(10), IsActive = false },
+                new Test{ Id =3, Name = "Test3", BirthDay = DateTime.Today.AddMonths(1), IsActive = true },
+            };
+            string one = JsonSerializer.Serialize<Test>(tests.First());
+            string list = JsonSerializer.Serialize<List<Test>>(tests);
+            Console.WriteLine(one);
+            Console.WriteLine();
+            Console.WriteLine(list);
+            Console.ReadKey();
+            Test test = JsonSerializer.Deserialize<Test>(one);
+            List<Test> test_d = JsonSerializer.Deserialize<List<Test>>(list);
+            Console.ReadKey();
+
+        }
+
+        class Test {
+            public long Id { get; set; }
+            public string Name { get; set; }
+            public DateTime BirthDay { get; set; }
+            public bool IsActive { get; set; }
+        }
+
+        static void Main2(string[] args) {
             Console.WriteLine("Please enter a password to use:");
             string password = Console.ReadLine();
             Console.WriteLine("Please enter a string to encrypt:");
@@ -27,7 +54,7 @@ namespace SavePassword.ConsoleTest {
             Console.ReadLine();
         }
 
-            static void Main1(string[] args) {
+        static void Main1(string[] args) {
             var key = Console.ReadLine();// Guid.NewGuid().ToString("N");
 
             var original = "Hello World!";
@@ -45,7 +72,7 @@ namespace SavePassword.ConsoleTest {
 
         static string Encrypt(string text, string key) {
             var _key = Encoding.UTF8.GetBytes(key);
-            
+
             using (var aes = Aes.Create()) {
                 using (var encryptor = aes.CreateEncryptor(_key, aes.IV)) {
                     using (var ms = new MemoryStream()) {
