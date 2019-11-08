@@ -14,16 +14,25 @@ namespace SavePassword.ConsoleTest {
                 new Test{ Id =2, Name = "Test2", BirthDay = DateTime.Today.AddDays(10), IsActive = false },
                 new Test{ Id =3, Name = "Test3", BirthDay = DateTime.Today.AddMonths(1), IsActive = true },
             };
-            string one = JsonSerializer.Serialize<Test>(tests.First());
-            string list = JsonSerializer.Serialize<List<Test>>(tests);
-            Console.WriteLine(one);
+            var group = new Group();
+            group.One = JsonSerializer.Serialize<Test>(tests.First());
+            group.List = JsonSerializer.Serialize<List<Test>>(tests);
+            Console.WriteLine(group.One);
             Console.WriteLine();
-            Console.WriteLine(list);
+            Console.WriteLine(group.List);
+            string ttt = JsonSerializer.Serialize<Group>(group);
+            Console.WriteLine();
+            Console.WriteLine(ttt);
             Console.ReadKey();
-            Test test = JsonSerializer.Deserialize<Test>(one);
-            List<Test> test_d = JsonSerializer.Deserialize<List<Test>>(list);
+            Group g = JsonSerializer.Deserialize<Group>(ttt);
+            Test test = JsonSerializer.Deserialize<Test>(g.One);
+            List<Test> test_d = JsonSerializer.Deserialize<List<Test>>(g.List);
             Console.ReadKey();
+        }
 
+        class Group {
+            public string One { get; set; }
+            public string List { get; set; }
         }
 
         class Test {
