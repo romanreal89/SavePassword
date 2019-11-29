@@ -1,5 +1,5 @@
-﻿@model List<PassRecord>
-
+﻿@model MainModel
+@Model.LastUpdate
 <a asp-action="Create" asp-controller="Home">Add</a>
 <table class="ReportTbl">
     <tr>
@@ -7,7 +7,7 @@
         <td>Login</td>
         <td></td>
     </tr>
-    @foreach (var record in Model)
+    @foreach (var record in Model.PassRecords)
     {
         <tr>
             <td>@record.URL</td>

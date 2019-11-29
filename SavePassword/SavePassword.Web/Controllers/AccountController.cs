@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SavePassword.Core;
 using SavePassword.Core.Entities;
+using System.Security.Cryptography;
 
 namespace SavePassword.Web.Controllers
 {
@@ -13,27 +14,22 @@ namespace SavePassword.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                DataContext.GetInstance().LoadData(model.Name, model.Password);
-                // await Authenticate(model.Name);
-                return RedirectToAction("Index", "Home");
+                try
+                {
+                    DataContext.GetInstance().LoadData(model.Name, model.Password);
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (CryptographicException exc)
+                {
+                    ModelState.AddModelError("Err", "Wrong credentials!");
+                }
             }
             return View(model);
         }
 
-        //private async Task Authenticate(string userName)
-        //{
-        //    var claims = new List<Claim>
-        //    {
-        //        new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
-        //    };
-        //    ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-        //    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
-        //}
-
         public IActionResult Logout()
         {
             DataContext.GetInstance().Signout();
-            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
     }
