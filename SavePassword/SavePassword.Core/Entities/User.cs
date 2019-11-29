@@ -2,14 +2,13 @@
 
 namespace SavePassword.Core.Entities
 {
-    public class PassRecord : Entity
+    public class User
     {
         [Required]
-        public string URL { get; set; }
+        public string Name { get; set; }
+
         [Required]
-        public string Login { get; set; }
-        [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
-        public string Details { get; set; }
     }
 }
