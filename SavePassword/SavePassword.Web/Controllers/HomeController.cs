@@ -27,11 +27,13 @@ namespace SavePassword.Web.Controllers
         [HttpPost]
         public IActionResult Create(PassRecord model)
         {
+            ModelState.Remove(nameof(model.Id));
             if (ModelState.IsValid)
             {
                 model.Id = Guid.NewGuid();
                 DataContext.GetInstance().PasswordModel.Add(model);
                 DataContext.GetInstance().Save();
+                return RedirectToAction("Index");
             }
             return View(model);
         }
@@ -49,6 +51,7 @@ namespace SavePassword.Web.Controllers
                 item.Password = model.Password;
                 item.Details = model.Details;
                 DataContext.GetInstance().Save();
+                return RedirectToAction("Index");
             }
             return View(model);
         }

@@ -5,6 +5,7 @@ namespace SavePassword.Core.Entities
     public class PassRecord : Entity
     {
         [Required]
+        [RegularExpression(@"^http(s)?://([\w-]+.)+[\w-]+(/[\w- ./?%&=])?$")]
         public string URL { get; set; }
         [Required]
         public string Login { get; set; }

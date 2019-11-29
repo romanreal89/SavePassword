@@ -1,5 +1,5 @@
 ﻿@model PassRecord
-
+@Html.ValidationSummary()
 <form method="post">
     <input type="submit" value="Save" class="btn" />
     <div class="validation" asp-validation-summary="ModelOnly" />
@@ -7,31 +7,19 @@
     <table>
         <tr class="form-group">
             <td><label asp-for="URL">URL</label></td>
-            <td>
-                <input type="text" asp-for="URL" />
-                <span asp-validation-for="URL" />
-            </td>
+            <td><input type="text" asp-for="URL" /></td>
         </tr>
         <tr class="form-group">
             <td><label asp-for="Login">Login</label></td>
-            <td>
-                <input asp-for="Login" />
-                <span asp-validation-for="Login" />
-            </td>
+            <td><input asp-for="Login" /></td>
         </tr>
         <tr class="form-group">
             <td><label asp-for="Password">Password</label></td>
-            <td>
-                <input asp-for="Password" />
-                <span asp-validation-for="Password" />
-            </td>
+            <td><input asp-for="Password" /></td>
         </tr>
         <tr class="form-group">
             <td><label asp-for="Details">Description</label></td>
-            <td>
-                <textarea asp-for="Details" rows="5" cols="50"></textarea>
-                <span asp-validation-for="Details" />
-            </td>
+            <td><textarea asp-for="Details" rows="5" cols="50"></textarea></td>
         </tr>
     </table>
 </form>
