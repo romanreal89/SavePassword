@@ -1,18 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using SavePassword.Core;
-using SavePassword.Core.Entities;
 
 namespace SavePassword.Web
 {
@@ -25,20 +15,12 @@ namespace SavePassword.Web
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
             services.AddDirectoryBrowser();
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //    .AddCookie(options => //CookieAuthenticationOptions
-            //    {
-            //        options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-            //    });
-
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -53,19 +35,6 @@ namespace SavePassword.Web
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            //app.UseAuthentication();
-            //DataContext.GetInstance().LoadData("test", "");
-            // app.UseStaticFiles(new StaticFileOptions {
-            //     FileProvider = new PhysicalFileProvider(
-            //Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "css")),
-            //     RequestPath = "/css"
-            // });
-
-            //app.UseDirectoryBrowser(new DirectoryBrowserOptions {
-            //    FileProvider = new PhysicalFileProvider(
-            //        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "css")),
-            //    RequestPath = "/css"
-            //});
             app.UseRouting();
 
             app.UseAuthorization();

@@ -3,9 +3,7 @@ using Microsoft.Extensions.Logging;
 using SavePassword.Core;
 using SavePassword.Core.Entities;
 using SavePassword.Web.Filters;
-using SavePassword.Web.Models;
 using System;
-using System.Diagnostics;
 using System.Linq;
 
 namespace SavePassword.Web.Controllers
@@ -54,12 +52,6 @@ namespace SavePassword.Web.Controllers
                 return RedirectToAction("Index");
             }
             return View(model);
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
