@@ -1,26 +1,33 @@
 ﻿@model MainModel
-<p>
-    @Model.LastUpdate
-</p>
+<script type="text/javascript">
+    $(function () {
+        $("#accordion").accordion();
+    });
+</script>
+<p>@Model.LastUpdate</p>
 <a asp-action="Create" asp-controller="Home">Add</a>
-@foreach (var group in Model.PassRecords.Select(x => x.Group).Distinct())
-{
-<h3>@group</h3>
-<table class="ReportTbl">
-    <tr>
-        <td>Name</td>
-        <td>URL</td>
-        <td>Login</td>
-        <td></td>
-    </tr>
-    @foreach (var record in Model.PassRecords.Where(x => x.Group == group))
-        {
-    <tr>
-        <td>@record.Name</td>
-        <td>@record.URL</td>
-        <td>@record.Login</td>
-        <td><a asp-action="Edit" asp-controller="Home" asp-route-id="@record.Id">Edit</a></td>
-    </tr>
-        }
-</table>
-}
+<div id="accordion">
+    @foreach (var group in Model.PassRecords.Select(x => x.Group).OrderBy(x => x).Distinct())
+    {
+        <h3>@group</h3>
+        <div>
+            <table class="ReportTbl">
+                <tr>
+                    <td>Name</td>
+                    <td>URL</td>
+                    <td>Login</td>
+                    <td></td>
+                </tr>
+                @foreach (var record in Model.PassRecords.Where(x => x.Group == group))
+                {
+                    <tr>
+                        <td>@record.Name</td>
+                        <td><a href="@record.URL" target="_blank">@record.URL</a></td>
+                        <td>@record.Login</td>
+                        <td><a asp-action="Edit" asp-controller="Home" asp-route-id="@record.Id">Edit</a></td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+</div>
