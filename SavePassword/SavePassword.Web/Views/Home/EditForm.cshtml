@@ -6,8 +6,16 @@
     <input type="hidden" asp-for="Id" />
     <table>
         <tr class="form-group">
+            <td><label asp-for="Name">Name</label></td>
+            <td><input asp-for="Name" /></td>
+        </tr>
+        <tr class="form-group">
             <td><label asp-for="URL">URL</label></td>
             <td><input type="text" asp-for="URL" /></td>
+        </tr>
+        <tr class="form-group">
+            <td><label asp-for="Group">Group</label></td>
+            <td><input asp-for="Group" /></td>
         </tr>
         <tr class="form-group">
             <td><label asp-for="Login">Login</label></td>

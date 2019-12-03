@@ -29,8 +29,8 @@ namespace SavePassword.Web.Controllers
             if (ModelState.IsValid)
             {
                 model.Id = Guid.NewGuid();
-                DataContext.GetInstance().PasswordModel.PassRecords.Add(model);
-                DataContext.GetInstance().Save();
+                DataContext.GetInstance().AddOrReplaceKey(model);
+                DataContext.GetInstance().SaveToFile();
                 return RedirectToAction("Index");
             }
             return View(model);
@@ -48,7 +48,7 @@ namespace SavePassword.Web.Controllers
                 item.Login = model.Login;
                 item.Password = model.Password;
                 item.Details = model.Details;
-                DataContext.GetInstance().Save();
+                DataContext.GetInstance().SaveToFile();
                 return RedirectToAction("Index");
             }
             return View(model);

@@ -1,19 +1,43 @@
 ﻿@model User
-
-<h2>Вход на сайт</h2>
-@Html.ValidationSummary()
-<form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
-    <div>
-        <div class="form-group">
-            <label asp-for="Name">Введите Email</label>
-            <input type="text" asp-for="Name" />
-        </div>
-        <div class="form-group">
-            <label asp-for="Password">Введите пароль</label>
-            <input asp-for="Password" />
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Войти" class="btn" />
-        </div>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SavePassword.Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <div class="container">
+        <h2>Вход на сайт</h2>
+        @Html.ValidationSummary()
+        <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
+            <div>
+                <div class="form-group">
+                    <label asp-for="Name">Введите Email</label>
+                    <input type="text" asp-for="Name" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password">Введите пароль</label>
+                    <input asp-for="Password" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Войти" class="btn" />
+                </div>
+            </div>
+        </form>
     </div>
-</form>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2019 - SavePassword.Web
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

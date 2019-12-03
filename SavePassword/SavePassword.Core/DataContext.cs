@@ -3,6 +3,7 @@ using SavePassword.Core.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -26,33 +27,59 @@ namespace SavePassword.Core
         private readonly static string AppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         private static string CurrentName;
         private static string CurrentPassword;
-        public MainModel PasswordModel { get; private set; }
+
+        private string EncryptedData { get; set; }
+        public MainModel PasswordModel
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(EncryptedData)) return new MainModel { PassRecords = new List<PassRecord>() };
+                var decrypt = EncryptionHelper.Decrypt(EncryptedData, CurrentPassword);
+                return JsonSerializer.Deserialize<MainModel>(decrypt);
+            }
+        }
+
+        public void AddOrReplaceKey(PassRecord passRecord)
+        {
+            var model = PasswordModel;
+            model.LastUpdate = DateTime.Now;
+            if (passRecord != null)
+            {
+                var record = model.PassRecords.FirstOrDefault(x => x.Id == passRecord.Id);
+                if (record == null)
+                    model.PassRecords.Add(passRecord);
+                else
+                {
+                    record.Details = passRecord.Details;
+                    record.Login = passRecord.Login;
+                    record.Password = passRecord.Password;
+                    record.URL = passRecord.URL;
+                    record.Group = passRecord.Group;
+                    record.Name = passRecord.Name;
+                }
+            }
+            var serialize = JsonSerializer.Serialize(model);
+            EncryptedData = EncryptionHelper.Encrypt(serialize, CurrentPassword);
+        }
 
         public void LoadData(string name, string password)
         {
             CurrentName = name;
             CurrentPassword = password;
             string fileName = Path.Combine(AppPath, name);
-            if (!File.Exists(fileName)) Save(password);
-            var file = File.ReadAllText(fileName);
-            var decrypt = EncryptionHelper.Decrypt(file, password);
-            PasswordModel = JsonSerializer.Deserialize<MainModel>(decrypt);
-            if (PasswordModel.PassRecords == null)
-                PasswordModel.PassRecords = new List<PassRecord>();
+            if (!File.Exists(fileName)) SaveToFile(password);
+            EncryptedData = File.ReadAllText(fileName);
         }
 
-        public void Save(string password = null)
+        public void SaveToFile(string password = null)
         {
             password = password ?? CurrentPassword ?? throw new Exception("Password is empty! Can't Encript!");
             if (string.IsNullOrEmpty(CurrentName)) throw new Exception("Current configuration is empty! Nothing to save!");
-            if (PasswordModel == null) PasswordModel = new MainModel();
-            PasswordModel.LastUpdate = DateTime.Now;
             string fileName = Path.Combine(AppPath, CurrentName);
-            var serialize = JsonSerializer.Serialize(PasswordModel);
-            var encrypt = EncryptionHelper.Encrypt(serialize, password ?? CurrentPassword);
+            if (string.IsNullOrEmpty(EncryptedData)) AddOrReplaceKey(null);//init
             using (StreamWriter streamWriter = new StreamWriter(fileName, false))
             {
-                streamWriter.WriteLine(encrypt);
+                streamWriter.WriteLine(EncryptedData);
             }
         }
 
@@ -60,7 +87,7 @@ namespace SavePassword.Core
 
         public void Signout()
         {
-            PasswordModel = null;
+            EncryptedData = null;
             CurrentName = null;
             CurrentPassword = null;
         }
